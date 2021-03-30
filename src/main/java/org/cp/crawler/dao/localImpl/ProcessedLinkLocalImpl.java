@@ -1,4 +1,6 @@
-package org.cp.crawler.dao;
+package org.cp.crawler.dao.localImpl;
+
+import org.cp.crawler.dao.ProcessedLinkDao;
 
 import java.util.HashSet;
 import java.util.Set;

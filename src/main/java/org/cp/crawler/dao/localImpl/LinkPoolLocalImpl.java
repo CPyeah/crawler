@@ -1,4 +1,6 @@
-package org.cp.crawler.dao;
+package org.cp.crawler.dao.localImpl;
+
+import org.cp.crawler.dao.LinkPoolDao;
 
 import java.util.LinkedList;
 import java.util.List;

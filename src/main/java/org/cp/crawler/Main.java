@@ -17,10 +17,6 @@ import org.jsoup.select.Elements;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @author chengpeng[OF3832]

@@ -6,6 +6,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.cp.crawler.dao.LinkPoolDao;
+import org.cp.crawler.dao.LinkPoolLocalImpl;
+import org.cp.crawler.dao.ProcessedLinkDao;
+import org.cp.crawler.dao.ProcessedLinkLocalImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,18 +30,15 @@ import java.util.Set;
 @Slf4j
 public class Main {
 
-    private static List<String> linkPool = new LinkedList<String>() {{
-        add("https://sina.cn/");
-    }};
-
-    private static Set<String> processedLinks = new HashSet<>();
+    private static LinkPoolDao linkPoolDao = new LinkPoolLocalImpl();
+    private static ProcessedLinkDao processedLinkDao = new ProcessedLinkLocalImpl();
 
     public static void main(String[] args) {
 
-        while (!linkPool.isEmpty()) {
+        while (!linkPoolDao.isEmpty()) {
             String link = getOneLinkFromLinkPool();
             if (hasProcessed(link) || !isCorrectLink(link)) {
-                linkPool.remove(link);
+                linkPoolDao.remove(link);
                 continue;
             }
             handleLink(link);
@@ -56,7 +57,7 @@ public class Main {
         resolveHtml(htmlString, link);
 
         //加入到已处理的池子中
-        processedLinks.add(link);
+        processedLinkDao.add(link);
     }
 
     private static void resolveHtml(String htmlString, String link) {
@@ -75,7 +76,7 @@ public class Main {
             if (titles != null && !titles.isEmpty()) {
                 log.info(link);
                 log.info(titles.get(0).text());
-                log.info(processedLinks.size() + "/" + linkPool.size());
+                log.info(processedLinkDao.count() + "/" + linkPoolDao.count());
             }
         }
     }
@@ -86,7 +87,7 @@ public class Main {
         for (Element linkTag : linkTags) {
             String href = linkTag.attr("href");
             if (isCorrectLink(href)) {
-                linkPool.add(href);
+                linkPoolDao.add(href);
             }
         }
     }
@@ -123,11 +124,11 @@ public class Main {
     }
 
     private static boolean hasProcessed(String link) {
-        return processedLinks.contains(link);
+        return processedLinkDao.contains(link);
     }
 
     private static String getOneLinkFromLinkPool() {
-        return linkPool.remove(0);
+        return linkPoolDao.getAndRemove();
     }
 
 }

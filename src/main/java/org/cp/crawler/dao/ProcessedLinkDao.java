@@ -1,5 +1,7 @@
 package org.cp.crawler.dao;
 
+import java.sql.SQLException;
+
 /**
  * @author chengpeng[OF3832]
  * @company qianmi.com
@@ -9,7 +11,7 @@ public interface ProcessedLinkDao {
 
     void add(String link);
 
-    int count();
+    int count() throws SQLException;
 
     boolean contains(String link);
 

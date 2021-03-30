@@ -7,9 +7,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.cp.crawler.dao.LinkPoolDao;
-import org.cp.crawler.dao.LinkPoolLocalImpl;
+import org.cp.crawler.dao.NewsDao;
+import org.cp.crawler.dao.h2Impl.LinkPoolH2Impl;
+import org.cp.crawler.dao.h2Impl.NewsDaoH2Impl;
+import org.cp.crawler.dao.h2Impl.ProcessedLinkH2Impl;
+import org.cp.crawler.dao.localImpl.LinkPoolLocalImpl;
 import org.cp.crawler.dao.ProcessedLinkDao;
-import org.cp.crawler.dao.ProcessedLinkLocalImpl;
+import org.cp.crawler.dao.localImpl.ProcessedLinkLocalImpl;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +21,7 @@ import org.jsoup.select.Elements;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * @author chengpeng[OF3832]
@@ -26,10 +31,11 @@ import java.io.IOException;
 @Slf4j
 public class Main {
 
-    private static LinkPoolDao linkPoolDao = new LinkPoolLocalImpl();
-    private static ProcessedLinkDao processedLinkDao = new ProcessedLinkLocalImpl();
+    private static LinkPoolDao linkPoolDao = new LinkPoolH2Impl();
+    private static ProcessedLinkDao processedLinkDao = new ProcessedLinkH2Impl();
+    private static NewsDao newsDao = new NewsDaoH2Impl();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         while (!linkPoolDao.isEmpty()) {
             String link = getOneLinkFromLinkPool();
@@ -42,7 +48,7 @@ public class Main {
 
     }
 
-    private static void handleLink(String link) {
+    private static void handleLink(String link) throws SQLException {
         link = linkPreHandle(link);
         //发http请求，获取到html
         String htmlString = invokeHttpGetHtml(link);
@@ -56,13 +62,13 @@ public class Main {
         processedLinkDao.add(link);
     }
 
-    private static void resolveHtml(String htmlString, String link) {
+    private static void resolveHtml(String htmlString, String link) throws SQLException {
         Document doc = Jsoup.parse(htmlString);
         getNewLinks(doc);
         storagePage(doc, link);
     }
 
-    private static void storagePage(Document doc, String link) {
+    private static void storagePage(Document doc, String link) throws SQLException {
         Elements articles = doc.select("article");
         if (articles.isEmpty()) {
             return;

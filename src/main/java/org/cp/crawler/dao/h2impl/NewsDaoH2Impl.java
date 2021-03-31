@@ -6,9 +6,7 @@ import org.cp.crawler.model.News;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
 /**
  * @author chengpeng[OF3832]
@@ -29,14 +27,7 @@ public class NewsDaoH2Impl implements NewsDao {
     }
 
     @Override
-    public void save(News news) throws SQLException {
-        String sql = "insert into NEWS (title, content, url, create_time, update_time) values ( ?, ?, ?, ?, ? )";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
-        preparedStatement.setString(1, news.getTitle());
-        preparedStatement.setString(2, news.getContent());
-        preparedStatement.setString(3, news.getUrl());
-        preparedStatement.setTimestamp(4, Timestamp.valueOf(news.getCreateTime()));
-        preparedStatement.setTimestamp(5, Timestamp.valueOf(news.getUpdateTime()));
-        preparedStatement.executeUpdate();
+    public void save(News news) {
+
     }
 }

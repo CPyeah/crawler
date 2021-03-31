@@ -29,7 +29,10 @@ public class LinkPoolH2Impl implements LinkPoolDao {
 
     @Override
     public int count() throws SQLException {
-        ResultSet resultSet = getQueryResultSet("select count(*) from LINKS_TO_BE_PROCESS");
+        String sql = "select count(*) from LINKS_TO_BE_PROCESS";
+        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        preparedStatement.executeQuery();
+        ResultSet resultSet = preparedStatement.getResultSet();
         if (resultSet.next()) {
             return resultSet.getInt(1);
         }
@@ -37,27 +40,12 @@ public class LinkPoolH2Impl implements LinkPoolDao {
     }
 
     @Override
-    public void add(String link) throws SQLException {
-        String sql = "insert into LINKS_TO_BE_PROCESS values ( ? )";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
-        preparedStatement.setString(1, link);
-        preparedStatement.executeUpdate();
+    public void add(String link) {
+
     }
 
     @Override
-    public String getAndRemove() throws SQLException {
-        ResultSet resultSet = getQueryResultSet("select LINK from LINKS_TO_BE_PROCESS limit 1");
-        String link = null;
-        if (resultSet.next()) {
-            link = resultSet.getString(1);
-            remove(link);
-        }
-        return link;
-    }
-
-    private ResultSet getQueryResultSet(String sql) throws SQLException {
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
-        preparedStatement.executeQuery();
-        return preparedStatement.getResultSet();
+    public String getAndRemove() {
+        return null;
     }
 }

@@ -14,8 +14,11 @@ public class ProcessedLinkH2Impl implements ProcessedLinkDao {
 
 
     @Override
-    public void add(String link) {
-
+    public void add(String link) throws SQLException {
+        String sql = "insert into LINKS_ALREADY_PROCESSED values ( ? )";
+        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        preparedStatement.setString(1, link);
+        preparedStatement.executeUpdate();
     }
 
     @Override

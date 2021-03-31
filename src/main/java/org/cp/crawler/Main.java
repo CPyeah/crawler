@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 /**
  * @author chengpeng[OF3832]
@@ -75,7 +76,10 @@ public class Main {
             Elements titles = article.getElementsByClass("art_tit_h1");
             if (titles != null && !titles.isEmpty()) {
                 String title = titles.get(0).text();
-                String content = "";
+                String content = article.select("p")
+                        .stream()
+                        .map(Element::text)
+                        .collect(Collectors.joining("\n"));
                 log.info(link);
                 log.info(title);
                 News news = News.of(title, content, link);

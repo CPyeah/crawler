@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cp.crawler.dao.NewsDao;
 import org.cp.crawler.model.News;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,8 +23,13 @@ public class NewsDaoH2Impl implements NewsDao {
 
     public NewsDaoH2Impl() {
         try {
-            connection = DriverManager.getConnection("jdbc:h2:file:/C:/java-workspace/crawler/src/main/resources/news", "root", "oracle");
-        } catch (SQLException e) {
+            File path = new File("src/main/resources");
+            connection
+                    = DriverManager.getConnection(
+                    "jdbc:h2:file:" + path.getAbsolutePath() + "/news",
+                    "root",
+                    "root");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

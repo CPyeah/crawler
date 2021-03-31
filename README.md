@@ -9,7 +9,7 @@
 - Jsoup
 - spotbugs
 - H2数据库
-- Flyway
+- Flyway 使用`mvn flyway:migrate`命令初始化数据库
 - Mybatis
 - spotbugs
 - Elasticsearch

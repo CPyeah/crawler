@@ -34,8 +34,6 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        linkPoolDao.add("https://sina.cn/");
-
         while (!linkPoolDao.isEmpty()) {
             String link = getOneLinkFromLinkPool();
             if (hasProcessed(link) || !isCorrectLink(link)) {

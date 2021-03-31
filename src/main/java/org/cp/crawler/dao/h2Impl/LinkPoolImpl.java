@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @company qianmi.com
  * @date 2021-03-30
  */
-public class LinkPoolH2Impl implements LinkPoolDao {
+public class LinkPoolImpl implements LinkPoolDao {
 
 
     @Override
@@ -22,7 +22,7 @@ public class LinkPoolH2Impl implements LinkPoolDao {
     @Override
     public void remove(String link) throws SQLException {
         String sql = "delete from LINKS_TO_BE_PROCESS where link = ?";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = NewsDaoImpl.connection.prepareStatement(sql);
         preparedStatement.setString(1, link);
         preparedStatement.executeUpdate();
     }
@@ -39,7 +39,7 @@ public class LinkPoolH2Impl implements LinkPoolDao {
     @Override
     public void add(String link) throws SQLException {
         String sql = "insert into LINKS_TO_BE_PROCESS values ( ? )";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = NewsDaoImpl.connection.prepareStatement(sql);
         preparedStatement.setString(1, link);
         preparedStatement.executeUpdate();
     }
@@ -56,7 +56,7 @@ public class LinkPoolH2Impl implements LinkPoolDao {
     }
 
     private ResultSet getQueryResultSet(String sql) throws SQLException {
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = NewsDaoImpl.connection.prepareStatement(sql);
         preparedStatement.executeQuery();
         return preparedStatement.getResultSet();
     }

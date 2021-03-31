@@ -10,13 +10,13 @@ import java.sql.SQLException;
  * @company qianmi.com
  * @date 2021-03-30
  */
-public class ProcessedLinkH2Impl implements ProcessedLinkDao {
+public class ProcessedLinkImpl implements ProcessedLinkDao {
 
 
     @Override
     public void add(String link) throws SQLException {
         String sql = "insert into LINKS_ALREADY_PROCESSED values ( ? )";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = NewsDaoImpl.connection.prepareStatement(sql);
         preparedStatement.setString(1, link);
         preparedStatement.executeUpdate();
     }
@@ -24,7 +24,7 @@ public class ProcessedLinkH2Impl implements ProcessedLinkDao {
     @Override
     public int count() throws SQLException {
         String sql = "select count(*) from LINKS_ALREADY_PROCESSED";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = NewsDaoImpl.connection.prepareStatement(sql);
         preparedStatement.executeQuery();
         return preparedStatement.getResultSet().getInt(1);
     }

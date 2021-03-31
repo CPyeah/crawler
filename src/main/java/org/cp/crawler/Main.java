@@ -6,9 +6,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.cp.crawler.dao.h2impl.LinkPoolH2Impl;
-import org.cp.crawler.dao.h2impl.NewsDaoH2Impl;
-import org.cp.crawler.dao.h2impl.ProcessedLinkH2Impl;
+import org.cp.crawler.dao.h2impl.LinkPoolImpl;
+import org.cp.crawler.dao.h2impl.NewsDaoImpl;
+import org.cp.crawler.dao.h2impl.ProcessedLinkImpl;
 import org.cp.crawler.model.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Main {
 
-    private static LinkPoolH2Impl linkPoolDao = new LinkPoolH2Impl();
-    private static ProcessedLinkH2Impl processedLinkDao = new ProcessedLinkH2Impl();
-    private static NewsDaoH2Impl newsDao = new NewsDaoH2Impl();
+    private static LinkPoolImpl linkPoolDao = new LinkPoolImpl();
+    private static ProcessedLinkImpl processedLinkDao = new ProcessedLinkImpl();
+    private static NewsDaoImpl newsDao = new NewsDaoImpl();
 
     public static void main(String[] args) throws SQLException {
 

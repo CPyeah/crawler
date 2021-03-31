@@ -17,11 +17,11 @@ import java.sql.Timestamp;
  * @date 2021-03-30
  */
 @Slf4j
-public class NewsDaoH2Impl implements NewsDao {
+public class NewsDaoImpl implements NewsDao {
 
     public static Connection connection;
 
-    public NewsDaoH2Impl() {
+    public NewsDaoImpl() {
         try {
             File path = new File("src/main/resources");
             connection
@@ -37,7 +37,7 @@ public class NewsDaoH2Impl implements NewsDao {
     @Override
     public void save(News news) throws SQLException {
         String sql = "insert into NEWS (title, content, url, create_time, update_time) values ( ?, ?, ?, ?, ? )";
-        PreparedStatement preparedStatement = NewsDaoH2Impl.connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = NewsDaoImpl.connection.prepareStatement(sql);
         preparedStatement.setString(1, news.getTitle());
         preparedStatement.setString(2, news.getContent());
         preparedStatement.setString(3, news.getUrl());

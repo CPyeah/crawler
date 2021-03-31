@@ -6,14 +6,17 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: cp_one-{{ checksum "pom.xml" }}
+          key: cp_one1-{{ checksum "pom.xml" }}
+      - run:
+          name: Run Maven clean
+          command: mvn clean
       - run:
           name: Run Maven verify
           command: mvn clean verify -PmavenCentral
       - save_cache: # saves the project dependencies
           paths:
             - ~/.m2
-          key: cp_one-{{ checksum "pom.xml" }}
+          key: cp_one1-{{ checksum "pom.xml" }}
 workflows:
   version: 2
   default:

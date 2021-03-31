@@ -2,6 +2,8 @@ package org.cp.crawler.dao;
 
 import org.cp.crawler.model.News;
 
+import java.sql.SQLException;
+
 /**
  * @author chengpeng[OF3832]
  * @company qianmi.com
@@ -9,6 +11,6 @@ import org.cp.crawler.model.News;
  */
 public interface NewsDao {
 
-    void save(News news);
+    void save(News news) throws SQLException;
 
 }

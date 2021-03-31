@@ -7,6 +7,8 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 /**
+ * 新闻
+ *
  * @author chengpeng[OF3832]
  * @company qianmi.com
  * @date 2021-03-30
@@ -27,4 +29,13 @@ public class News {
 
     private LocalDateTime updateTime;
 
+    public static News of(String title, String content, String link) {
+        return News.builder()
+                .title(title)
+                .content(content)
+                .url(link)
+                .createTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now())
+                .build();
+    }
 }

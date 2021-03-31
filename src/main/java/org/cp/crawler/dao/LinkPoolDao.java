@@ -15,8 +15,8 @@ public interface LinkPoolDao {
 
     int count() throws SQLException;
 
-    void add(String link);
+    void add(String link) throws SQLException;
 
-    String getAndRemove();
+    String getAndRemove() throws SQLException;
 
 }

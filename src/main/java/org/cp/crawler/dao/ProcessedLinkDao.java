@@ -9,7 +9,7 @@ import java.sql.SQLException;
  */
 public interface ProcessedLinkDao {
 
-    void add(String link);
+    void add(String link) throws SQLException;
 
     int count() throws SQLException;
 

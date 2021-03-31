@@ -6,12 +6,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.cp.crawler.dao.LinkPoolDao;
-import org.cp.crawler.dao.NewsDao;
-import org.cp.crawler.dao.ProcessedLinkDao;
-import org.cp.crawler.dao.h2Impl.LinkPoolH2Impl;
-import org.cp.crawler.dao.h2Impl.NewsDaoH2Impl;
-import org.cp.crawler.dao.h2Impl.ProcessedLinkH2Impl;
+import org.cp.crawler.dao.h2impl.LinkPoolH2Impl;
+import org.cp.crawler.dao.h2impl.NewsDaoH2Impl;
+import org.cp.crawler.dao.h2impl.ProcessedLinkH2Impl;
+import org.cp.crawler.model.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,11 +27,13 @@ import java.sql.SQLException;
 @Slf4j
 public class Main {
 
-    private static LinkPoolDao linkPoolDao = new LinkPoolH2Impl();
-    private static ProcessedLinkDao processedLinkDao = new ProcessedLinkH2Impl();
-    private static NewsDao newsDao = new NewsDaoH2Impl();
+    private static LinkPoolH2Impl linkPoolDao = new LinkPoolH2Impl();
+    private static ProcessedLinkH2Impl processedLinkDao = new ProcessedLinkH2Impl();
+    private static NewsDaoH2Impl newsDao = new NewsDaoH2Impl();
 
     public static void main(String[] args) throws SQLException {
+
+        linkPoolDao.add("https://sina.cn/");
 
         while (!linkPoolDao.isEmpty()) {
             String link = getOneLinkFromLinkPool();
@@ -74,15 +74,18 @@ public class Main {
         for (Element article : articles) {
             Elements titles = article.getElementsByClass("art_tit_h1");
             if (titles != null && !titles.isEmpty()) {
+                String title = titles.get(0).text();
+                String content = "";
                 log.info(link);
-                log.info(titles.get(0).text());
-                log.info(processedLinkDao.count() + "/" + linkPoolDao.count());
+                log.info(title);
+                News news = News.of(title, content, link);
+                newsDao.save(news);
             }
         }
     }
 
 
-    private static void getNewLinks(Document doc) {
+    private static void getNewLinks(Document doc) throws SQLException {
         Elements linkTags = doc.select("a");
         for (Element linkTag : linkTags) {
             String href = linkTag.attr("href");
@@ -127,7 +130,7 @@ public class Main {
         return processedLinkDao.contains(link);
     }
 
-    private static String getOneLinkFromLinkPool() {
+    private static String getOneLinkFromLinkPool() throws SQLException {
         return linkPoolDao.getAndRemove();
     }
 

@@ -1,4 +1,4 @@
-package org.cp.crawler.dao.h2impl;
+package org.cp.crawler.dao.h2.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.cp.crawler.dao.NewsDao;

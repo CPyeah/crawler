@@ -6,9 +6,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.cp.crawler.dao.h2impl.LinkPoolImpl;
-import org.cp.crawler.dao.h2impl.NewsDaoImpl;
-import org.cp.crawler.dao.h2impl.ProcessedLinkImpl;
+import org.cp.crawler.dao.h2.impl.LinkPoolImpl;
+import org.cp.crawler.dao.h2.impl.NewsDaoImpl;
+import org.cp.crawler.dao.h2.impl.ProcessedLinkImpl;
 import org.cp.crawler.model.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,6 +34,11 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
+        startToCrawl();
+
+    }
+
+    private static void startToCrawl() throws SQLException {
         while (!linkPoolDao.isEmpty()) {
             String link = getOneLinkFromLinkPool();
             if (hasProcessed(link) || !isCorrectLink(link)) {
@@ -42,7 +47,6 @@ public class Main {
             }
             handleLink(link);
         }
-
     }
 
     private static void handleLink(String link) throws SQLException {

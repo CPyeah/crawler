@@ -1,4 +1,4 @@
-package org.cp.crawler.dao.localImpl;
+package org.cp.crawler.dao.local.impl;
 
 import org.cp.crawler.dao.ProcessedLinkDao;
 

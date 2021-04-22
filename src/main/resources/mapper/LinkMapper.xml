@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cp.crawler.LinkMapper">
+
+    <select id="count" parameterType="string" resultType="int">
+        select count(*) from ${table}
+    </select>
+
+    <insert id="insert" parameterType="HashMap">
+        insert into ${table} values ( #{link} )
+    </insert>
+
+    <delete id="remove" parameterType="java.util.HashMap">
+        delete from ${table} where link = #{link}
+    </delete>
+
+    <select id="selectOne" parameterType="string" resultType="string">
+        select LINK from ${table} limit 1
+    </select>
+</mapper>

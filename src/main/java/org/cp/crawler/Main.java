@@ -6,9 +6,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.cp.crawler.dao.LinkPoolDao;
+import org.cp.crawler.dao.NewsDao;
+import org.cp.crawler.dao.ProcessedLinkDao;
 import org.cp.crawler.dao.h2.impl.LinkPoolImpl;
 import org.cp.crawler.dao.h2.impl.NewsDaoImpl;
 import org.cp.crawler.dao.h2.impl.ProcessedLinkImpl;
+import org.cp.crawler.dao.mybatis.impl.LinkPoolMybatisImpl;
+import org.cp.crawler.dao.mybatis.impl.NewsMybatisImpl;
+import org.cp.crawler.dao.mybatis.impl.ProcessedLinkMybatisImpl;
 import org.cp.crawler.model.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,9 +34,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Main {
 
-    private static LinkPoolImpl linkPoolDao = new LinkPoolImpl();
-    private static ProcessedLinkImpl processedLinkDao = new ProcessedLinkImpl();
-    private static NewsDaoImpl newsDao = new NewsDaoImpl();
+    private static LinkPoolDao linkPoolDao = new LinkPoolMybatisImpl();
+    private static ProcessedLinkDao processedLinkDao = new ProcessedLinkMybatisImpl();
+    private static NewsDao newsDao = new NewsMybatisImpl();
 
     public static void main(String[] args) throws SQLException {
 

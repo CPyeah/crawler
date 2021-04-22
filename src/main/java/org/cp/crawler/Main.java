@@ -2,6 +2,7 @@ package org.cp.crawler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -9,13 +10,16 @@ import org.apache.http.util.EntityUtils;
 import org.cp.crawler.dao.LinkPoolDao;
 import org.cp.crawler.dao.NewsDao;
 import org.cp.crawler.dao.ProcessedLinkDao;
-import org.cp.crawler.dao.h2.impl.LinkPoolImpl;
-import org.cp.crawler.dao.h2.impl.NewsDaoImpl;
-import org.cp.crawler.dao.h2.impl.ProcessedLinkImpl;
 import org.cp.crawler.dao.mybatis.impl.LinkPoolMybatisImpl;
 import org.cp.crawler.dao.mybatis.impl.NewsMybatisImpl;
 import org.cp.crawler.dao.mybatis.impl.ProcessedLinkMybatisImpl;
 import org.cp.crawler.model.News;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,6 +28,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -92,7 +97,27 @@ public class Main {
                 log.info(title);
                 News news = News.of(title, content, link);
                 newsDao.save(news);
+                saveToElasticSearch(news);
             }
+        }
+    }
+
+    /**
+     * 保存导ES 里面
+     *
+     * @param news 新闻信息
+     */
+    private static void saveToElasticSearch(News news) {
+        try (RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http")))) {
+            IndexRequest request = new IndexRequest("news");
+            Map<String, Object> newsMap = news.toMap();
+            request.source(newsMap, XContentType.JSON);
+            IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+            log.info(indexResponse.status().toString());
+        } catch (IOException e) {
+            log.error("ES error", e);
         }
     }
 

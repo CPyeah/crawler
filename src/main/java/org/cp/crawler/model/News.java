@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 新闻
@@ -66,5 +68,16 @@ public class News {
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
                 '}';
+    }
+
+    public Map<String, Object> toMap() {
+        return new HashMap<String, Object>(10) {{
+           put("id", id);
+           put("title", title);
+           put("content", content);
+           put("url", url);
+           put("createTime", createTime);
+           put("updateTime", updateTime);
+        }};
     }
 }
